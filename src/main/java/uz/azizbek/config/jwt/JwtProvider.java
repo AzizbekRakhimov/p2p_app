@@ -15,11 +15,12 @@ public class JwtProvider {
     private final String secret = "cardSecuritySecret";
 
     public String generateToken(Users users) {
-        long expireDate = 60000;
+        long expireDate = 60000000000L;
 
         return Jwts.builder()
                 .setSubject(users.getUsername())
-                .setExpiration(new Date(expireDate))
+                .claim(users.getId().toString(), users.getUsername())
+                .setExpiration(new Date(System.currentTimeMillis() + expireDate))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
@@ -33,8 +34,9 @@ public class JwtProvider {
                     .parseClaimsJws(token);
             return true;
         } catch (Exception e) {
-            return false;
+            log.info("invalid token");
         }
+        return false;
     }
 
     public String getLoginFromToken(String token) {

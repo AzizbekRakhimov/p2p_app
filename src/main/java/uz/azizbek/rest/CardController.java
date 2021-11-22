@@ -15,10 +15,12 @@ import uz.azizbek.payload.CardDto;
 import uz.azizbek.service.CardService;
 import uz.azizbek.service.impl.UsersDetailService;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
-@RequestMapping("api/card")
+@RequestMapping("/api/card")
 public class CardController {
 
     private final CardService cardService;
@@ -31,8 +33,8 @@ public class CardController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseData<CardDto>> addCard(@RequestBody CardDto cardDto) {
-        Users user = usersDetailService.findUserById(cardDto.getUsers().getId());
+    public ResponseEntity<ResponseData<CardDto>> addCard(@Valid @RequestBody CardDto cardDto) {
+        Users user = usersDetailService.findUserById(cardDto.getUserId());
         if (user == null)
             return ResponseData.response("User not found", HttpStatus.BAD_REQUEST);
         return ResponseData.response(cardService.createCard(cardDto));
@@ -52,7 +54,7 @@ public class CardController {
         );
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/getUserCard/{userId}")
     public ResponseEntity<ResponseData<Page<CardDto>>> findCardsByUserId(@PathVariable Long userId,
                                                                          @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
         return ResponseData.response(cardService.findCardsByUserId(userId, pageable));

@@ -2,7 +2,6 @@ package uz.azizbek.payload;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import uz.azizbek.model.Users;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -14,7 +13,6 @@ public class CardDto {
     @NotNull(message = "Username can not be empty")
     private String username;
 
-    @NotNull(message = "Number can not be empty")
     private Long cardNumber;
 
     private Double balance;
@@ -22,7 +20,8 @@ public class CardDto {
     @JsonFormat(pattern = "MM/yy")
     private LocalDate expireDate;
 
-    private Users users;
+    @NotNull(message = "user can not be empty")
+    private Long userId;
 
     private boolean active;
 }

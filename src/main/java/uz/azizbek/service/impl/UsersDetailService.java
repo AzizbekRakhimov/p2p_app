@@ -23,8 +23,8 @@ public class UsersDetailService implements UserDetailsService {
     @PostConstruct
     public void init(){
         users = Arrays.asList(
-                new Users(1L, "Azizbek", passwordEncoder.encode("123")),
-                new Users(2L, "Test", passwordEncoder.encode("123")));
+                new Users(1L, "Azizbek", passwordEncoder.encode("123"), new ArrayList<>()),
+                new Users(2L, "Test", passwordEncoder.encode("123"), new ArrayList<>()));
     }
 
     @Override
@@ -33,6 +33,6 @@ public class UsersDetailService implements UserDetailsService {
     }
 
     public Users findUserById(Long id){
-        return users.stream().filter( users -> id.equals(users.getId())).findAny().orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return users.stream().filter( users -> id.equals(users.getId())).findAny().orElse(null);
     }
 }

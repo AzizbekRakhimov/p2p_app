@@ -16,9 +16,6 @@ import java.time.ZoneId;
 @Service
 public class CardMapper {
 
-    @Autowired
-    private UsersDetailService usersDetailService;
-
     public CardDto toDto(Card card){
         CardDto cardDto = new CardDto();
         cardDto.setId(card.getId());
@@ -27,14 +24,13 @@ public class CardMapper {
         cardDto.setBalance(card.getBalance());
         cardDto.setExpireDate(card.getExpireDate());
         cardDto.setActive(card.isActive());
-        Users user = usersDetailService.findUserById(card.getUserId());
-        cardDto.setUsers(user);
+        cardDto.setUserId(card.getUserId());
         return cardDto;
     }
 
     public Card toEntity(CardDto cardDto){
         Card card = new Card();
-        card.setUserId(cardDto.getUsers().getId());
+        card.setUserId(cardDto.getUserId());
         card.setUsername(cardDto.getUsername());
         card.setExpireDate(LocalDate.ofInstant(Instant.ofEpochMilli(System.currentTimeMillis() + 126230400000L), ZoneId.systemDefault()));
         return card;

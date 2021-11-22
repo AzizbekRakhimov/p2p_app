@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 import uz.azizbek.model.Users;
 import uz.azizbek.service.impl.UsersDetailService;
 
@@ -15,11 +16,14 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
 @Log
-public class JwtFilter extends GenericFilterBean {
+public class JwtFilter extends OncePerRequestFilter {
+
+    public static final String AUTHORIZATION = "Authorization";
 
     @Autowired
     JwtProvider jwtProvider;
@@ -27,24 +31,27 @@ public class JwtFilter extends GenericFilterBean {
     @Autowired
     UsersDetailService usersDetailService;
 
+
+    private String getTokenFromRequest(HttpServletRequest httpServletRequest) {
+        String bearer = httpServletRequest.getHeader(AUTHORIZATION);
+        if (StringUtils.hasText(bearer) && bearer.startsWith("Bearer "))
+            return bearer.substring(7);
+        return null;
+    }
+
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        String token = getTokenFromRequest((HttpServletRequest) servletRequest);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        String token = getTokenFromRequest(request);
+
         if (token != null && jwtProvider.validateToken(token)) {
             String username = jwtProvider.getLoginFromToken(token);
             Users user = usersDetailService.loadUserByUsername(username);
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
-
         }
 
-        filterChain.doFilter(servletRequest, servletResponse);
-    }
+        filterChain.doFilter(request, response);
 
-    private String getTokenFromRequest(HttpServletRequest httpServletRequest) {
-        String bearer = httpServletRequest.getHeader("Authorization");
-        if (StringUtils.hasText(bearer) && bearer.startsWith("Bearer "))
-            return bearer.substring(7);
-        return null;
     }
 }
