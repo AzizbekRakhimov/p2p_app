@@ -2,6 +2,7 @@ package uz.azizbek.service.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import uz.azizbek.model.Card;
 import uz.azizbek.payload.CardDto;
@@ -60,5 +61,15 @@ public class CardServiceImpl implements CardService {
     public boolean isExpired(Card card) {
         LocalDate currentDate = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(ZoneId.systemDefault()).toLocalDate();
         return card.getExpireDate().isBefore(currentDate);
+    }
+
+    @Override
+    public Page<CardDto> findCardsByUserId(Long userId, Pageable pageable) {
+        return findCardsByUserIdEntity(userId, pageable).map(cardMapper::toDto);
+    }
+
+    @Override
+    public Page<Card> findCardsByUserIdEntity(Long userId, Pageable pageable) {
+        return cardRepository.findAllByUserId(userId, pageable);
     }
 }

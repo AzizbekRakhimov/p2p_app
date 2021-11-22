@@ -8,9 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
 
 @Data
 @AllArgsConstructor
@@ -30,6 +28,8 @@ public class Card {
 
     @JsonFormat(pattern = "MM/yy")
     private LocalDate expireDate;
+
+    private Long userId;
 
     private boolean active = true;
 }

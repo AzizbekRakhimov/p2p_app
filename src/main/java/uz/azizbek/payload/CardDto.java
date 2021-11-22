@@ -2,6 +2,7 @@ package uz.azizbek.payload;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import uz.azizbek.model.Users;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -20,6 +21,8 @@ public class CardDto {
 
     @JsonFormat(pattern = "MM/yy")
     private LocalDate expireDate;
+
+    private Users users;
 
     private boolean active;
 }

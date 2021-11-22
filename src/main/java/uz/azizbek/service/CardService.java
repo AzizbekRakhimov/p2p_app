@@ -21,4 +21,8 @@ public interface CardService {
     Optional<Card> findById(Long id);
 
     boolean isExpired(Card card);
+
+    Page<CardDto> findCardsByUserId(Long userId, Pageable pageable);
+
+    Page<Card> findCardsByUserIdEntity(Long userId, Pageable pageable);
 }
