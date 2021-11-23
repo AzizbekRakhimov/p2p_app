@@ -1,4 +1,4 @@
-package uz.azizbek.rest;
+package uz.azizbek.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -6,14 +6,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.azizbek.common.ResponseData;
-import uz.azizbek.model.Card;
 import uz.azizbek.model.Users;
 import uz.azizbek.payload.CardDto;
 import uz.azizbek.service.CardService;
-import uz.azizbek.service.impl.UsersDetailService;
+import uz.azizbek.service.impl.AuthService;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -25,16 +23,16 @@ public class CardController {
 
     private final CardService cardService;
 
-    private final UsersDetailService usersDetailService;
+    private final AuthService authService;
 
-    public CardController(CardService cardService, UsersDetailService usersDetailService) {
+    public CardController(CardService cardService, AuthService authService) {
         this.cardService = cardService;
-        this.usersDetailService = usersDetailService;
+        this.authService = authService;
     }
 
     @PostMapping
     public ResponseEntity<ResponseData<CardDto>> addCard(@Valid @RequestBody CardDto cardDto) {
-        Users user = usersDetailService.findUserById(cardDto.getUserId());
+        Users user = authService.findUserById(cardDto.getUserId());
         if (user == null)
             return ResponseData.response("User not found", HttpStatus.BAD_REQUEST);
         return ResponseData.response(cardService.createCard(cardDto));

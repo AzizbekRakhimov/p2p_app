@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class UsersDetailService implements UserDetailsService {
+public class AuthService implements UserDetailsService {
 
     @Autowired
     PasswordEncoder passwordEncoder;

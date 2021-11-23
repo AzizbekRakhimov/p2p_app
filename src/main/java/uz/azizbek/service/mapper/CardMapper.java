@@ -1,12 +1,8 @@
 package uz.azizbek.service.mapper;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import uz.azizbek.model.Card;
-import uz.azizbek.model.Users;
 import uz.azizbek.payload.CardDto;
-import uz.azizbek.service.impl.UsersDetailService;
 
 import java.time.Instant;
 import java.time.LocalDate;

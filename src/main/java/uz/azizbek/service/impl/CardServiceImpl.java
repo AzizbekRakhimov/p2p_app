@@ -71,4 +71,12 @@ public class CardServiceImpl implements CardService {
     public Page<Card> findCardsByUserIdEntity(Long userId, Pageable pageable) {
         return cardRepository.findAllByUserId(userId, pageable);
     }
+
+    @Override
+    public boolean canTransfer(Long cardId, Double amount) {
+        Optional<Card> card = findById(cardId);
+        if ( (card.get().getBalance() - amount - amount * 0.0035) < 0)
+            return false;
+        return true;
+    }
 }

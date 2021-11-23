@@ -1,4 +1,4 @@
-package uz.azizbek.rest;
+package uz.azizbek.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +14,7 @@ import uz.azizbek.common.ResponseData;
 import uz.azizbek.config.jwt.JwtProvider;
 import uz.azizbek.model.Users;
 import uz.azizbek.payload.AuthDto;
-import uz.azizbek.service.impl.UsersDetailService;
+import uz.azizbek.service.impl.AuthService;
 
 import javax.validation.Valid;
 
@@ -26,7 +26,7 @@ public class AuthController {
     private JwtProvider jwtProvider;
 
     @Autowired
-    private UsersDetailService userDetailsService;
+    private AuthService userDetailsService;
 
     @Autowired
     AuthenticationManager authenticationManager;

@@ -25,4 +25,6 @@ public interface CardService {
     Page<CardDto> findCardsByUserId(Long userId, Pageable pageable);
 
     Page<Card> findCardsByUserIdEntity(Long userId, Pageable pageable);
+
+    boolean canTransfer(Long cardId, Double amount);
 }

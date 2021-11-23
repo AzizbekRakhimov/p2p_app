@@ -6,15 +6,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.filter.OncePerRequestFilter;
 import uz.azizbek.model.Users;
-import uz.azizbek.service.impl.UsersDetailService;
+import uz.azizbek.service.impl.AuthService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -29,7 +26,7 @@ public class JwtFilter extends OncePerRequestFilter {
     JwtProvider jwtProvider;
 
     @Autowired
-    UsersDetailService usersDetailService;
+    AuthService authService;
 
 
     private String getTokenFromRequest(HttpServletRequest httpServletRequest) {
@@ -46,7 +43,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if (token != null && jwtProvider.validateToken(token)) {
             String username = jwtProvider.getLoginFromToken(token);
-            Users user = usersDetailService.loadUserByUsername(username);
+            Users user = authService.loadUserByUsername(username);
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(auth);
         }
