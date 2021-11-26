@@ -1,6 +1,8 @@
 package uz.azizbek.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uz.azizbek.model.Card;
 import uz.azizbek.model.Outcome;
@@ -43,5 +45,45 @@ public class OutcomeServiceImpl implements OutcomeService {
     @Override
     public Outcome save(Outcome outcome) {
         return outcomeRepository.save(outcome);
+    }
+
+    @Override
+    public Page<OutcomeDto> findByUserId(Long id, Pageable pageable) {
+        return findByUserIdEntity(id, pageable).map(outcomeMapper::toDto);
+    }
+
+    @Override
+    public Page<Outcome> findByUserIdEntity(Long id, Pageable pageable) {
+        return outcomeRepository.findByUserId(id, pageable);
+    }
+
+    @Override
+    public Optional<OutcomeDto> findOneByUserId(Long id, Long userId) {
+        return findByUserId(id, userId).map(outcomeMapper::toDto);
+    }
+
+    @Override
+    public Optional<Outcome> findByUserId(Long id, Long userId) {
+        return outcomeRepository.findByIdAndUserId(id, userId);
+    }
+
+    @Override
+    public Page<OutcomeDto> findAllDto(Pageable pageable) {
+        return findAll(pageable).map(outcomeMapper::toDto);
+    }
+
+    @Override
+    public Page<Outcome> findAll(Pageable pageable) {
+        return outcomeRepository.findAll(pageable);
+    }
+
+    @Override
+    public Optional<OutcomeDto> findOne(Long id) {
+        return findById(id).map(outcomeMapper::toDto);
+    }
+
+    @Override
+    public Optional<Outcome> findById(Long id) {
+        return outcomeRepository.findById(id);
     }
 }

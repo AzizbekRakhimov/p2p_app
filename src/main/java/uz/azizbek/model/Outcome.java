@@ -26,6 +26,9 @@ public class Outcome {
     @JoinColumn(name = "to_card_id")
     private Card toCardId;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     private Double amount;
 
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")

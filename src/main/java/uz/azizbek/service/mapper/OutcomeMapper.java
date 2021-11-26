@@ -21,6 +21,7 @@ public class OutcomeMapper {
         outcomeDto.setCommissionAmount(outcome.getCommissionAmount());
         outcomeDto.setDate(outcome.getDate());
         outcomeDto.setAmount(outcome.getAmount());
+        outcomeDto.setUserId(outcome.getUserId());
         return outcomeDto;
     }
 
@@ -30,6 +31,7 @@ public class OutcomeMapper {
         outcome.setCommissionAmount(outcomeDto.getCommissionAmount());
         outcome.setDate(LocalDateTime.now());
         outcome.setAmount(outcomeDto.getAmount());
+        outcome.setUserId(outcomeDto.getUserId());
         return outcome;
     }
 }

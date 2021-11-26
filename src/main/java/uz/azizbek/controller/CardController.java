@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import uz.azizbek.common.ResponseData;
 import uz.azizbek.model.Users;
@@ -32,9 +33,11 @@ public class CardController {
 
     @PostMapping
     public ResponseEntity<ResponseData<CardDto>> addCard(@Valid @RequestBody CardDto cardDto) {
-        Users user = authService.findUserById(cardDto.getUserId());
-        if (user == null)
+        Users principal = authService.findUserById(cardDto.getUserId());
+
+        if (principal == null )
             return ResponseData.response("User not found", HttpStatus.BAD_REQUEST);
+
         return ResponseData.response(cardService.createCard(cardDto));
     }
 

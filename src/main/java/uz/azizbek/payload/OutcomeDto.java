@@ -1,5 +1,6 @@
 package uz.azizbek.payload;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
@@ -14,6 +15,7 @@ public class OutcomeDto {
     private CardDto toCard;
     @NotNull(message = "Amount can not be empty")
     private Double amount;
+    private Long userId;
     private LocalDateTime date;
     private Double commissionAmount = 0.0035;
 }
