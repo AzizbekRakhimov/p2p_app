@@ -5,11 +5,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import uz.azizbek.model.Card;
+import uz.azizbek.model.Income;
 import uz.azizbek.model.Outcome;
 import uz.azizbek.payload.OutcomeDto;
 import uz.azizbek.repository.OutcomeRepository;
 import uz.azizbek.service.CardService;
+import uz.azizbek.service.IncomeService;
 import uz.azizbek.service.OutcomeService;
+import uz.azizbek.service.mapper.IncomeMapper;
 import uz.azizbek.service.mapper.OutcomeMapper;
 
 import java.util.Optional;
@@ -26,6 +29,12 @@ public class OutcomeServiceImpl implements OutcomeService {
     @Autowired
     CardService cardService;
 
+    @Autowired
+    IncomeService incomeService;
+
+    @Autowired
+    IncomeMapper incomeMapper;
+
     @Override
     public Optional<OutcomeDto> sendTo(OutcomeDto outcomeDto, Card toCard, Card fromCard) {
         fromCard.setBalance(fromCard.getBalance() - outcomeDto.getCommissionAmount() * outcomeDto.getAmount() - outcomeDto.getAmount());
@@ -39,6 +48,8 @@ public class OutcomeServiceImpl implements OutcomeService {
 
         outcome.setFromCardId(fromCardSave);
         outcome.setToCardId(toCardSave);
+        Income income = incomeMapper.outcomeToIncome(outcome);
+        incomeService.save(income);
         return Optional.of(outcomeMapper.toDto(save(outcome)));
     }
 
