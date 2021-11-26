@@ -20,11 +20,13 @@ public class Income {
 
     @ManyToOne
     @JoinColumn(name = "from_card_id")
-    private Card fromCardId;
+    private Card fromCard;
 
     @ManyToOne
     @JoinColumn(name = "to_card_id")
-    private Card toCardId;
+    private Card toCard;
+
+    private Long userId;
 
     private Double amount;
 
